@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -115,13 +116,20 @@ func getUsers(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, users)
 }
 
+var userIDTemp = 1
+
 func createUser(c *gin.Context) {
 	var newUser User
+
+	newUser.ID = strconv.Itoa(userIDTemp)
+
+	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on username
 
 	if err := c.BindJSON(&newUser); err != nil {
 		return
 	}
 
+	userIDTemp++
 	users = append(users, newUser)
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
