@@ -121,13 +121,16 @@ var userIDTemp = 1
 func createUser(c *gin.Context) {
 	var newUser User
 
+	fmt.Printf("%+v\n", newUser)
 	newUser.ID = strconv.Itoa(userIDTemp)
-
+	// c.IndentedJSON(http.StatusCreated, newUser)
+	fmt.Printf("%+v\n", newUser)
 	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on username
 
 	if err := c.BindJSON(&newUser); err != nil {
 		return
 	}
+	fmt.Printf("%+v\n", newUser)
 
 	userIDTemp++
 	users = append(users, newUser)
@@ -156,14 +159,22 @@ func userById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, user)
 }
 
-// func seedData(c *gin.Context) {
-// 	for
-// }
+func seedData(c *gin.Context) {
+	// log.Println("This is the log:", c)
+	c.JSON(http.StatusOK, gin.H{"status": "ohh baby"})
+	// fmt.Print("Context", c.Accepted, "\n")
+	// for i, person := range users {
+	// 	fmt.Print(i, person, "\n")
+	// 	createUser(c)
+	// }
+	fmt.Print("\n")
+}
 
 // Main
 
 func main() {
 	router := gin.Default()
+	seedData(&gin.Context{})
 	router.GET("/users", getUsers)
 	router.GET("/users/:id", userById)
 	router.POST("/users", createUser)
