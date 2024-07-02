@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -116,10 +117,8 @@ func teamById(c *gin.Context) {
 var userIDTemp = 1
 
 func getUsers(c *gin.Context) {
-
-	// the context that is sent to the createuserbyjson function is erroring constantly
-	// that's the fix that's needed before anything works
-	log.Println(c)
+	// This exists to create seed Users for the purposes of testing at the start
+	// From here
 	if len(users) == 0 {
 		for _, person := range usersSeed {
 			person.ID = strconv.Itoa(userIDTemp)
@@ -127,17 +126,25 @@ func getUsers(c *gin.Context) {
 			createUserByJson(c, person)
 			userIDTemp++
 		}
+		return
 	}
+	// To here
 
 	c.IndentedJSON(http.StatusOK, users)
 }
 
 func createUserByJson(c *gin.Context, newUser User) {
-	if err := c.BindJSON(&newUser); err != nil {
-		log.Println(&newUser)
-		log.Println(err)
+	newUserJSON, err := json.Marshal(newUser)
+	if err != nil {
+		log.Println("New User: \t", newUserJSON)
+		log.Println("Error marshaling JSON:", err)
 		return
 	}
+	// if err := c.BindJSON(&newUser); err != nil {
+
+	// 	log.Println("Error: \t", err)
+	// 	return
+	// }
 	users = append(users, newUser)
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
