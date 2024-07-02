@@ -2,30 +2,21 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
-	"errors"
 	"fmt"
-	"log"
 	"net/http"
-	"strconv"
 	"time"
 
-	"ScavengerHunt/backend/models"
-	"ScavengerHunt/backend/seed_data"
+	"ScavengerHunt/backend/teams"
 	"ScavengerHunt/backend/users"
 
 	"github.com/gin-gonic/gin"
 )
 
-var teams []models.Team
-
-var teamnames = make(map[string]string)
-
 func addUserToTeamByUserID(c *gin.Context) {
 	teamID := c.Param("teamID")
 	userID := c.Param("userID")
 
-	team, err := getTeamById(teamID)
+	team, err := teams.GetTeamById(teamID)
 	if err != nil {
 		// Handle error
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This team doesn't seem to exist"})
@@ -58,7 +49,7 @@ func removeUserFromTeamByUserID(c *gin.Context) {
 	teamID := c.Param("teamID")
 	userID := c.Param("userID")
 
-	team, teamErr := getTeamById(teamID)
+	team, teamErr := teams.GetTeamById(teamID)
 	if teamErr != nil {
 		// Handle error
 		message := fmt.Sprintln("This team with id: ", teamID, "doesn't seem to exist")
@@ -90,61 +81,6 @@ func removeUserFromTeamByUserID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, team)
 }
 
-//
-// Team Functions
-//
-
-var teamIDTemp = 1
-
-func getTeams(c *gin.Context) {
-	if len(teams) == 0 {
-		for _, team := range seed_data.TeamsSeed {
-			team.ID = strconv.Itoa(teamIDTemp)
-			// fmt.Printf("%+v\n", person)
-			createTeamByJson(c, team)
-			teamIDTemp++
-		}
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, teams)
-}
-
-func createTeamByJson(c *gin.Context, newTeam models.Team) {
-
-	newTeamJSON, err := json.Marshal(newTeam)
-	if err != nil {
-		log.Println("New Team: \t", newTeamJSON)
-		log.Println("Error marshaling JSON:", err)
-		return
-	}
-	teams = append(teams, newTeam)
-	teamnames[newTeam.TeamName] = newTeam.ID
-	c.IndentedJSON(http.StatusCreated, newTeam)
-}
-
-func getTeamById(id string) (*models.Team, error) {
-	for i, team := range teams {
-		if team.ID == id {
-			return &teams[i], nil
-		}
-	}
-
-	return nil, errors.New("team not found")
-}
-
-func teamById(c *gin.Context) {
-	id := c.Param("id")
-	team, err := getTeamById(id)
-
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Team not found"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, team)
-}
-
 func hitUsersEndpoint() {
 	// Wait for 2 seconds
 	time.Sleep(2 * time.Second)
@@ -172,8 +108,8 @@ func main() {
 	router.GET("/users/:id", users.UserById)
 	router.POST("/users", users.CreateUser)
 
-	router.GET("/teams", getTeams)
-	router.GET("/teams/:id", teamById)
+	router.GET("/teams", teams.GetTeams)
+	router.GET("/teams/:id", teams.TeamById)
 
 	router.PATCH("/teams/add/:teamID/:userID", addUserToTeamByUserID)
 	router.PATCH("/teams/remove/:teamID/:userID", removeUserFromTeamByUserID)
