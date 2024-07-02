@@ -1,4 +1,4 @@
-module app/backend
+module ScavengerHunt/backend
 
 go 1.22
 

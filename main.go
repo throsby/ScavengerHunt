@@ -10,12 +10,15 @@ import (
 	"strconv"
 	"time"
 
+	"ScavengerHunt/backend/models"
+	"ScavengerHunt/backend/seed_data"
+	"ScavengerHunt/backend/users"
+
 	"github.com/gin-gonic/gin"
 )
 
-var users []User
-var teams []Team
-var usernames = make(map[string]string)
+var teams []models.Team
+
 var teamnames = make(map[string]string)
 
 func addUserToTeamByUserID(c *gin.Context) {
@@ -27,7 +30,7 @@ func addUserToTeamByUserID(c *gin.Context) {
 		// Handle error
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This team doesn't seem to exist"})
 	}
-	user, err := getUserById(userID)
+	user, err := users.GetUserById(userID)
 	if err != nil {
 		// Handle error
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This user doesn't seem to exist"})
@@ -62,7 +65,7 @@ func removeUserFromTeamByUserID(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": message})
 	}
 
-	user, userErr := getUserById(userID)
+	user, userErr := users.GetUserById(userID)
 	if userErr != nil {
 		// Handle error
 		message := fmt.Sprintln("This team with id: ", userID, "doesn't seem to exist")
@@ -95,7 +98,7 @@ var teamIDTemp = 1
 
 func getTeams(c *gin.Context) {
 	if len(teams) == 0 {
-		for _, team := range teamsSeed {
+		for _, team := range seed_data.TeamsSeed {
 			team.ID = strconv.Itoa(teamIDTemp)
 			// fmt.Printf("%+v\n", person)
 			createTeamByJson(c, team)
@@ -107,7 +110,7 @@ func getTeams(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, teams)
 }
 
-func createTeamByJson(c *gin.Context, newTeam Team) {
+func createTeamByJson(c *gin.Context, newTeam models.Team) {
 
 	newTeamJSON, err := json.Marshal(newTeam)
 	if err != nil {
@@ -116,11 +119,11 @@ func createTeamByJson(c *gin.Context, newTeam Team) {
 		return
 	}
 	teams = append(teams, newTeam)
-	usernames[newTeam.TeamName] = newTeam.ID
+	teamnames[newTeam.TeamName] = newTeam.ID
 	c.IndentedJSON(http.StatusCreated, newTeam)
 }
 
-func getTeamById(id string) (*Team, error) {
+func getTeamById(id string) (*models.Team, error) {
 	for i, team := range teams {
 		if team.ID == id {
 			return &teams[i], nil
@@ -140,78 +143,6 @@ func teamById(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, team)
-}
-
-// User Functions
-var userIDTemp = 1
-
-func getUsers(c *gin.Context) {
-	// This exists to create seed Users for the purposes of testing at the start
-	// From here
-	if len(users) == 0 {
-		for _, person := range usersSeed {
-			person.ID = strconv.Itoa(userIDTemp)
-			// fmt.Printf("%+v\n", person)
-			createUserByJson(c, person)
-			userIDTemp++
-		}
-		return
-	}
-	// To here
-
-	c.IndentedJSON(http.StatusOK, users)
-}
-
-func createUserByJson(c *gin.Context, newUser User) {
-
-	newUserJSON, err := json.Marshal(newUser)
-	if err != nil {
-		log.Println("New User: \t", newUserJSON)
-		log.Println("Error marshaling JSON:", err)
-		return
-	}
-	users = append(users, newUser)
-	usernames[newUser.Username] = newUser.ID
-	c.IndentedJSON(http.StatusCreated, newUser)
-}
-
-func createUser(c *gin.Context) {
-	var newUser User
-	newUser.ID = strconv.Itoa(userIDTemp)
-	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on username
-	if err := c.BindJSON(&newUser); err != nil {
-		return
-	}
-	if _, exists := usernames[newUser.Username]; exists {
-		c.IndentedJSON(http.StatusConflict, gin.H{"message": "this username already exists"})
-		return
-	}
-
-	userIDTemp++
-	users = append(users, newUser)
-	c.IndentedJSON(http.StatusCreated, newUser)
-}
-
-func getUserById(id string) (*User, error) {
-	for i, user := range users {
-		if user.ID == id {
-			return &users[i], nil
-		}
-	}
-
-	return nil, errors.New("user not found")
-}
-
-func userById(c *gin.Context) {
-	id := c.Param("id")
-	user, err := getUserById(id)
-
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "User not found"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, user)
 }
 
 func hitUsersEndpoint() {
@@ -235,11 +166,11 @@ func hitUsersEndpoint() {
 // Main
 
 func main() {
-	// fmt.Println(users, teams)
+
 	router := gin.Default()
-	router.GET("/users", getUsers)
-	router.GET("/users/:id", userById)
-	router.POST("/users", createUser)
+	router.GET("/users", users.GetUsers)
+	router.GET("/users/:id", users.UserById)
+	router.POST("/users", users.CreateUser)
 
 	router.GET("/teams", getTeams)
 	router.GET("/teams/:id", teamById)
