@@ -1,18 +1,22 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 var users []User
 var teams []Team
+var usernames = make(map[string]string)
+var teamnames = make(map[string]string)
 
 func addUserToTeamByUserID(c *gin.Context) {
 	teamID := c.Param("teamID")
@@ -87,8 +91,33 @@ func removeUserFromTeamByUserID(c *gin.Context) {
 // Team Functions
 //
 
+var teamIDTemp = 1
+
 func getTeams(c *gin.Context) {
+	if len(teams) == 0 {
+		for _, team := range teamsSeed {
+			team.ID = strconv.Itoa(teamIDTemp)
+			// fmt.Printf("%+v\n", person)
+			createTeamByJson(c, team)
+			teamIDTemp++
+		}
+		return
+	}
+
 	c.IndentedJSON(http.StatusOK, teams)
+}
+
+func createTeamByJson(c *gin.Context, newTeam Team) {
+
+	newTeamJSON, err := json.Marshal(newTeam)
+	if err != nil {
+		log.Println("New Team: \t", newTeamJSON)
+		log.Println("Error marshaling JSON:", err)
+		return
+	}
+	teams = append(teams, newTeam)
+	usernames[newTeam.TeamName] = newTeam.ID
+	c.IndentedJSON(http.StatusCreated, newTeam)
 }
 
 func getTeamById(id string) (*Team, error) {
@@ -134,18 +163,15 @@ func getUsers(c *gin.Context) {
 }
 
 func createUserByJson(c *gin.Context, newUser User) {
+
 	newUserJSON, err := json.Marshal(newUser)
 	if err != nil {
 		log.Println("New User: \t", newUserJSON)
 		log.Println("Error marshaling JSON:", err)
 		return
 	}
-	// if err := c.BindJSON(&newUser); err != nil {
-
-	// 	log.Println("Error: \t", err)
-	// 	return
-	// }
 	users = append(users, newUser)
+	usernames[newUser.Username] = newUser.ID
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
 
@@ -154,6 +180,10 @@ func createUser(c *gin.Context) {
 	newUser.ID = strconv.Itoa(userIDTemp)
 	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on username
 	if err := c.BindJSON(&newUser); err != nil {
+		return
+	}
+	if _, exists := usernames[newUser.Username]; exists {
+		c.IndentedJSON(http.StatusConflict, gin.H{"message": "this username already exists"})
 		return
 	}
 
@@ -184,6 +214,24 @@ func userById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, user)
 }
 
+func hitUsersEndpoint() {
+	// Wait for 2 seconds
+	time.Sleep(2 * time.Second)
+
+	// Send the GET request
+	resp, err := http.Get("http://localhost:8080/users")
+	if err != nil {
+		fmt.Println("Error sending GET request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and print the response body
+	body := new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	fmt.Println("Response:", body.String())
+}
+
 // Main
 
 func main() {
@@ -198,6 +246,8 @@ func main() {
 
 	router.PATCH("/teams/add/:teamID/:userID", addUserToTeamByUserID)
 	router.PATCH("/teams/remove/:teamID/:userID", removeUserFromTeamByUserID)
+	// For testing
+	go hitUsersEndpoint()
 
 	router.Run("localhost:8080")
 }

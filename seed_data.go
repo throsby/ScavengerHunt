@@ -4,7 +4,7 @@ var usersSeed = []User{
 	{FirstName: "Throsby", LastName: "Wells", EmailAddress: "twells@gmail.com", Username: "throsbyw"},
 	{FirstName: "Portia", LastName: "Wells", EmailAddress: "pwells@gmail.com", Username: "portiaw"},
 	{FirstName: "Tim", LastName: "Wells", EmailAddress: "t2wells@gmail.com", Username: "timw"},
-	{FirstName: "Portia", LastName: "Wells", EmailAddress: "pwells@gmail.com", Username: "portiaw"},
+	{FirstName: "Portia", LastName: "Wells", EmailAddress: "pwells@gmail.com", Username: "portiaw2"},
 }
 
 var teamsSeed = []Team{
