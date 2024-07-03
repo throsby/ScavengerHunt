@@ -6,7 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	scavengerhunt "ScavengerHunt/backend/scavenger_hunt"
+	"ScavengerHunt/backend/scavengerhuntclues"
+	"ScavengerHunt/backend/scavengerhunts"
 	"ScavengerHunt/backend/teams"
 	"ScavengerHunt/backend/users"
 
@@ -15,7 +16,7 @@ import (
 
 func hitEndpoints() {
 	// Wait for 2 seconds
-	time.Sleep(1 * time.Second)
+	time.Sleep(3 * time.Second)
 
 	log.Println("\tHitting GET Users Endpoint")
 	// Send the GET request
@@ -29,7 +30,7 @@ func hitEndpoints() {
 	// Read and print the response body
 	body := new(bytes.Buffer)
 	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String(), "\n")
+	log.Println("Response:", body.String())
 
 	time.Sleep(1 * time.Second)
 
@@ -44,12 +45,12 @@ func hitEndpoints() {
 	// Read and print the response body
 	body = new(bytes.Buffer)
 	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String(), "\n")
+	log.Println("Response:", body.String())
 
 	time.Sleep(1 * time.Second)
 
-	log.Println("\tHitting GET Teams Endpoint")
-	resp, err = http.Get("http://localhost:8080/scavenger_hunts")
+	log.Println("\tHitting GET ScavengerHunts Endpoint")
+	resp, err = http.Get("http://localhost:8080/scavengerhunts")
 	if err != nil {
 		log.Println("Error sending GET request:", err)
 		return
@@ -59,7 +60,38 @@ func hitEndpoints() {
 	// Read and print the response body
 	body = new(bytes.Buffer)
 	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String(), "\n")
+	log.Println("Response:", body.String())
+
+	time.Sleep(1 * time.Second)
+
+	log.Println("\tHitting GET ScavengerHunt Clues Endpoint")
+	resp, err = http.Get("http://localhost:8080/clues")
+
+	if err != nil {
+		log.Println("Error sending GET request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and print the response body
+	body = new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	log.Println("Response:", body.String())
+
+	time.Sleep(1 * time.Second)
+
+	log.Println("\tHitting PATCH ScavengerHuntClues Endpoint to Add clue to hunt")
+	resp, err = http.Post("http://localhost:8080/scavengerhunts/1/1", "application/json", nil)
+	if err != nil {
+		log.Println("Error sending PATCH request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and print the response body
+	body = new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	log.Println("Response:", body.String())
 }
 
 // Main
@@ -77,9 +109,13 @@ func main() {
 	router.PATCH("/teams/add/:teamID/:userID", teams.AddUserToTeamByUserID)
 	router.PATCH("/teams/remove/:teamID/:userID", teams.RemoveUserFromTeamByUserID)
 
-	router.GET("/scavenger_hunts", scavengerhunt.GetScavengerHunts)
-	router.GET("/scavenger_hunts/:id", scavengerhunt.ScavengerHuntById)
-	router.POST("/scavenger_hunts", scavengerhunt.CreateScavengerHunt)
+	router.GET("/scavengerhunts", scavengerhunts.GetScavengerHunts)
+	router.GET("/scavengerhunts/:id", scavengerhunts.ScavengerHuntById)
+	router.POST("/scavengerhunts", scavengerhunts.CreateScavengerHunt)
+	router.POST("/scavengerhunts/:huntID/:clueID", scavengerhunts.AddScavengerHuntClueToHunt)
+
+	router.GET("/clues", scavengerhuntclues.GetScavengerHuntClues)
+
 	// For testing
 	go hitEndpoints()
 

@@ -87,7 +87,7 @@ func AddUserToTeamByUserID(c *gin.Context) {
 		// Handle error
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This user doesn't seem to exist"})
 	}
-	fmt.Println(team.TeamMembers)
+	log.Println(team.TeamMembers)
 	if len(team.TeamMembers) > 0 {
 		for _, member := range team.TeamMembers {
 			if member.ID == user.ID {
