@@ -3,8 +3,10 @@ package teams
 import (
 	"ScavengerHunt/backend/models"
 	"ScavengerHunt/backend/seed_data"
+	"ScavengerHunt/backend/users"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -67,6 +69,75 @@ func TeamById(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Team not found"})
 		return
 	}
+
+	c.IndentedJSON(http.StatusOK, team)
+}
+
+func AddUserToTeamByUserID(c *gin.Context) {
+	teamID := c.Param("teamID")
+	userID := c.Param("userID")
+
+	team, err := GetTeamById(teamID)
+	if err != nil {
+		// Handle error
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This team doesn't seem to exist"})
+	}
+	user, err := users.GetUserById(userID)
+	if err != nil {
+		// Handle error
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This user doesn't seem to exist"})
+	}
+	fmt.Println(team.TeamMembers)
+	if len(team.TeamMembers) > 0 {
+		for _, member := range team.TeamMembers {
+			if member.ID == user.ID {
+				c.IndentedJSON(http.StatusConflict, gin.H{"message": "This user is already a member of this team"})
+				return
+			}
+		}
+	}
+	if len(team.TeamMembers) > team.MaxNumberOfMembers {
+		message := fmt.Sprint("The number of team members is already at its maximum of ", team.MaxNumberOfMembers)
+		c.IndentedJSON(http.StatusConflict, gin.H{"message": message})
+		return
+	}
+	team.TeamMembers = append(team.TeamMembers, *user)
+
+	c.IndentedJSON(http.StatusOK, team)
+}
+
+func RemoveUserFromTeamByUserID(c *gin.Context) {
+	teamID := c.Param("teamID")
+	userID := c.Param("userID")
+
+	team, teamErr := GetTeamById(teamID)
+	if teamErr != nil {
+		// Handle error
+		message := fmt.Sprintln("This team with id: ", teamID, "doesn't seem to exist")
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": message})
+	}
+
+	user, userErr := users.GetUserById(userID)
+	if userErr != nil {
+		// Handle error
+		message := fmt.Sprintln("This team with id: ", userID, "doesn't seem to exist")
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": message})
+	}
+
+	var userPosition int
+	// Check if there are more than 0 teamMembers
+	if len(team.TeamMembers) > 0 {
+		for i, member := range team.TeamMembers {
+			if member.ID == user.ID {
+				userPosition = i
+			}
+		}
+	} else {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Team has no members to be removed"})
+		return
+	}
+
+	team.TeamMembers = append(team.TeamMembers[:userPosition], team.TeamMembers[userPosition+1:]...)
 
 	c.IndentedJSON(http.StatusOK, team)
 }

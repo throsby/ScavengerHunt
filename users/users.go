@@ -57,7 +57,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 	if _, exists := usernames[newUser.Username]; exists {
-		c.IndentedJSON(http.StatusConflict, gin.H{"message": "this username already exists"})
+		c.IndentedJSON(http.StatusConflict, gin.H{"message": "this username is already being used"})
 		return
 	}
 

@@ -20,3 +20,12 @@ var TeamsSeed = []models.Team{
 		TeamMembers:        []models.User{},
 	},
 }
+
+var ScavengerHuntSeed = []models.ScavengerHunt{
+	{
+		ScavengerHuntName: "Gilded Age,",
+		NumberOfTeams:     0,
+		MaxNumberOfTeams:  15,
+		Teams:             []models.Team{},
+	},
+}
