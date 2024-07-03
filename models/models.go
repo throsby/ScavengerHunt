@@ -21,7 +21,7 @@ type ScavengerHunt struct {
 	ScavengerHuntName  string              `json:"scavengerhuntname"`
 	NumberOfTeams      int                 `json:"numberofteams"`
 	MaxNumberOfTeams   int                 `json:"maxnumberofteams"`
-	Teams              []Team              `json:"teamms"`
+	Teams              []Team              `json:"teams"`
 	ScavengerHuntClues []ScavengerHuntClue `json:"scavengerhuntclues"`
 }
 
@@ -29,6 +29,6 @@ type ScavengerHuntClue struct {
 	ID             string          `json:"id"`
 	Name           string          `json:"name"`
 	Text           string          `json:"text"`
-	PointValue     string          `json:"pointvalue"`
+	PointValue     int             `json:"pointvalue"`
 	ScavengerHunts []ScavengerHunt `json:"scavengerhunts"`
 }

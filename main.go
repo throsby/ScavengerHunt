@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -14,10 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func hitUsersEndpoint() {
+func hitEndpoints() {
 	// Wait for 2 seconds
-	time.Sleep(2 * time.Second)
+	time.Sleep(1 * time.Second)
 
+	log.Println("\tHitting GET Users Endpoint")
 	// Send the GET request
 	resp, err := http.Get("http://localhost:8080/users")
 	if err != nil {
@@ -29,7 +29,37 @@ func hitUsersEndpoint() {
 	// Read and print the response body
 	body := new(bytes.Buffer)
 	body.ReadFrom(resp.Body)
-	fmt.Println("Response:", body.String())
+	log.Println("Response:", body.String(), "\n")
+
+	time.Sleep(1 * time.Second)
+
+	log.Println("\tHitting GET Teams Endpoint")
+	resp, err = http.Get("http://localhost:8080/teams")
+	if err != nil {
+		log.Println("Error sending GET request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and print the response body
+	body = new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	log.Println("Response:", body.String(), "\n")
+
+	time.Sleep(1 * time.Second)
+
+	log.Println("\tHitting GET Teams Endpoint")
+	resp, err = http.Get("http://localhost:8080/scavenger_hunts")
+	if err != nil {
+		log.Println("Error sending GET request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and print the response body
+	body = new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	log.Println("Response:", body.String(), "\n")
 }
 
 // Main
@@ -47,11 +77,11 @@ func main() {
 	router.PATCH("/teams/add/:teamID/:userID", teams.AddUserToTeamByUserID)
 	router.PATCH("/teams/remove/:teamID/:userID", teams.RemoveUserFromTeamByUserID)
 
-	router.GET("/scavenger_hunt", scavengerhunt.GetScavengerHunts)
-	router.GET("/scavenger_hunt/:id", scavengerhunt.ScavengerHuntById)
-	router.POST("/scavenger_hunt", scavengerhunt.CreateScavengerHunt)
+	router.GET("/scavenger_hunts", scavengerhunt.GetScavengerHunts)
+	router.GET("/scavenger_hunts/:id", scavengerhunt.ScavengerHuntById)
+	router.POST("/scavenger_hunts", scavengerhunt.CreateScavengerHunt)
 	// For testing
-	go hitUsersEndpoint()
+	go hitEndpoints()
 
 	router.Run("localhost:8080")
 }
