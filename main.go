@@ -80,7 +80,7 @@ func hitEndpoints() {
 
 	time.Sleep(1 * time.Second)
 
-	log.Println("\tHitting PATCH ScavengerHuntClues Endpoint to Add clue to hunt")
+	log.Println("\tHitting Post ScavengerHuntClues Endpoint to Add clue to hunt")
 	resp, err = http.Post("http://localhost:8080/scavengerhunts/1/1", "application/json", nil)
 	if err != nil {
 		log.Println("Error sending PATCH request:", err)
