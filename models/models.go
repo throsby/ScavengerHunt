@@ -26,9 +26,10 @@ type ScavengerHunt struct {
 }
 
 type ScavengerHuntClue struct {
-	ID             string          `json:"id"`
-	Name           string          `json:"name"`
-	Text           string          `json:"text"`
-	PointValue     int             `json:"pointvalue"`
-	ScavengerHunts []ScavengerHunt `json:"scavengerhunts"`
+	ID               string          `json:"id"`
+	Name             string          `json:"name"`
+	Text             string          `json:"text"`
+	PointValue       int             `json:"pointvalue"`
+	ScavengerHunts   []ScavengerHunt `json:"scavengerhunts"`
+	ConfirmedCorrect bool            `json:"confirmedcorrect"`
 }

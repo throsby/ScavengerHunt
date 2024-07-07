@@ -81,9 +81,19 @@ func ScavengerHuntClueById(c *gin.Context) {
 	clue, err := GetScavengerHuntClueById(id)
 
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "ScavengerHuntClue not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Scavenger Hunt Clue not found"})
 		return
 	}
 
+	c.IndentedJSON(http.StatusOK, clue)
+}
+
+func MarkCorrect(c *gin.Context) {
+	clue, err := GetScavengerHuntClueById("id")
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Error marking correct"})
+		return
+	}
+	clue.ConfirmedCorrect = true
 	c.IndentedJSON(http.StatusOK, clue)
 }

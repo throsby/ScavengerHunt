@@ -115,6 +115,8 @@ func main() {
 	router.POST("/scavengerhunts/:huntID/:clueID", scavengerhunts.AddScavengerHuntClueToHunt)
 
 	router.GET("/clues", scavengerhuntclues.GetScavengerHuntClues)
+	router.GET("/clues/:id", scavengerhuntclues.ScavengerHuntClueById)
+	router.POST("/clues/mark/:id", scavengerhuntclues.MarkCorrect)
 
 	// For testing
 	go hitEndpoints()
