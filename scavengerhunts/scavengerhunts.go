@@ -119,6 +119,8 @@ func RemoveScavengerHuntClueById(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	}
 
+	// TODO Check for if the clue is in the hunt
+
 	for _, huntToFind := range clue.ScavengerHunts {
 		// Confirms by name because each ScavengerHunt must have a unique name
 		// This is probably a bad strategy though
