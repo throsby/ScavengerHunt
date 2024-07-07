@@ -93,13 +93,45 @@ func AddScavengerHuntClueToHunt(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This scavenger hunt doesn't seem to exist"})
 	}
 	clue, err := scavengerhuntclues.GetScavengerHuntClueById(clueID)
-	log.Println(clue)
+	// log.Println(clue)
 	if err != nil {
 		// Handle error
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	}
 
+	clue.ScavengerHunts = append(clue.ScavengerHunts, hunt.ScavengerHuntName)
 	hunt.ScavengerHuntClues = append(hunt.ScavengerHuntClues, *clue)
-	clue.ScavengerHunts = append(clue.ScavengerHunts, *hunt)
+	c.IndentedJSON(http.StatusOK, hunt)
+}
+
+func RemoveScavengerHuntClueById(c *gin.Context) {
+	huntID := c.Param("huntID")
+	clueID := c.Param("clueID")
+
+	hunt, err := GetScavengerHuntById(huntID)
+	if err != nil {
+		// Handle error
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This scavenger hunt doesn't seem to exist"})
+	}
+	clue, err := scavengerhuntclues.GetScavengerHuntClueById(clueID)
+	if err != nil {
+		// Handle error
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
+	}
+
+	for _, huntToFind := range clue.ScavengerHunts {
+		// Confirms by name because each ScavengerHunt must have a unique name
+		// This is probably a bad strategy though
+		if hunt.ScavengerHuntName == huntToFind {
+			// Remove hunt.name from []clue.scavengerhunts
+		}
+	}
+	for _, clueToFind := range hunt.ScavengerHuntClues {
+		// Confirms by ID because a clue can have several names
+		if clue.ID == clueToFind.ID {
+			// Remove clueToFind from []hunt.ScavengerHuntClues{}
+		}
+	}
+
 	c.IndentedJSON(http.StatusOK, hunt)
 }
