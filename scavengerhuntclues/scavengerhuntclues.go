@@ -90,7 +90,9 @@ func ScavengerHuntClueById(c *gin.Context) {
 
 func MarkCorrect(c *gin.Context) {
 	clue, err := GetScavengerHuntClueById("id")
+	log.Println(clue)
 	if err != nil {
+		log.Println(err)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Error marking correct"})
 		return
 	}

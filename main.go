@@ -32,7 +32,7 @@ func hitEndpoints() {
 	body.ReadFrom(resp.Body)
 	log.Println("Response:", body.String())
 
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
 
 	log.Println("\tHitting GET Teams Endpoint")
 	resp, err = http.Get("http://localhost:8080/teams")
@@ -47,7 +47,7 @@ func hitEndpoints() {
 	body.ReadFrom(resp.Body)
 	log.Println("Response:", body.String())
 
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
 
 	log.Println("\tHitting GET ScavengerHunts Endpoint")
 	resp, err = http.Get("http://localhost:8080/scavengerhunts")
@@ -62,7 +62,7 @@ func hitEndpoints() {
 	body.ReadFrom(resp.Body)
 	log.Println("Response:", body.String())
 
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
 
 	log.Println("\tHitting GET ScavengerHunt Clues Endpoint")
 	resp, err = http.Get("http://localhost:8080/clues")
@@ -78,7 +78,7 @@ func hitEndpoints() {
 	body.ReadFrom(resp.Body)
 	log.Println("Response:", body.String())
 
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
 
 	log.Println("\tHitting Post ScavengerHuntClues Endpoint to Add clue to hunt")
 	resp, err = http.Post("http://localhost:8080/scavengerhunts/1/1", "application/json", nil)
@@ -112,6 +112,8 @@ func main() {
 	router.GET("/scavengerhunts", scavengerhunts.GetScavengerHunts)
 	router.GET("/scavengerhunts/:id", scavengerhunts.ScavengerHuntById)
 	router.POST("/scavengerhunts", scavengerhunts.CreateScavengerHunt)
+	router.POST("/scavengerhunts/remove/:huntID/:clueID", scavengerhunts.RemoveScavengerHuntClueById)
+	router.POST("/scavengerhunts/add/:huntID/:clueID", scavengerhunts.AddScavengerHuntClueToHunt)
 	router.POST("/scavengerhunts/:huntID/:clueID", scavengerhunts.AddScavengerHuntClueToHunt)
 
 	router.GET("/clues", scavengerhuntclues.GetScavengerHuntClues)
