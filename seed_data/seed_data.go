@@ -5,38 +5,36 @@ import (
 )
 
 var UsersSeed = []models.User{
-	{FirstName: "Horatio", LastName: "Puits", EmailAddress: "twerasdfs@gmail.com", Username: "Horatio"},
-	{FirstName: "Mercedes", LastName: "Puits", EmailAddress: "clarlasdfs@gmail.com", Username: "Mercedes"},
-	{FirstName: "Drakmar", LastName: "Puits", EmailAddress: "t2wasdfasdfls@gmail.com", Username: "Drakmar"},
-	{FirstName: "Groucho", LastName: "Puits", EmailAddress: "garasdfble@gmail.com", Username: "Groucho"},
+	{UserID: 1, Password: "asdflkj", Email: "twerasdfs@gmail.com", Username: "Horatio"},
+	{UserID: 2, Password: "asdflkj", Email: "clarlasdfs@gmail.com", Username: "Mercedes"},
+	{UserID: 3, Password: "asdflkj", Email: "t2wasdfasdfls@gmail.com", Username: "Drakmar"},
+	{UserID: 4, Password: "asdflkj", Email: "garasdfble@gmail.com", Username: "Groucho"},
 }
 
 var TeamsSeed = []models.Team{
 	{
-		ID:                 "1",
-		TeamName:           "Apricot Apricot",
-		NumberOfMembers:    0,
-		MaxNumberOfMembers: 4,
-		TeamMembers:        []models.User{},
+		TeamID: 1,
+		Name:   "Apricot Apricot",
+		HuntID: 1,
 	},
 }
 
-var ScavengerHuntSeed = []models.ScavengerHunt{
+var ScavengerHuntSeed = []models.Hunt{
 	{
-		ScavengerHuntName:  "Gilded Age",
-		NumberOfTeams:      0,
-		MaxNumberOfTeams:   15,
-		Teams:              []models.Team{},
-		ScavengerHuntClues: []models.ScavengerHuntClue{},
+		HuntID:      1,
+		Title:       "Gilded Age",
+		MaxTeamSize: 3,
+		CreatedBy:   1,
+		Description: "Blurb blurb blurb",
 	},
 }
 
-var ScavengerHuntCluesSeed = []models.ScavengerHuntClue{
-	{
-		Name:             "Brooklyn Bridge",
-		Text:             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis urna cursus eget nunc. Non blandit massa enim nec dui nunc. Senectus et netus et malesuada fames. Id porta nibh venenatis cras. Sit amet massa vitae tortor condimentum. Hac habitasse platea dictumst quisque sagittis purus sit. Tincidunt ornare massa eget egestas purus viverra accumsan in nisl. Hac habitasse platea dictumst vestibulum rhoncus. Egestas tellus rutrum tellus pellentesque eu.",
-		PointValue:       25,
-		ScavengerHunts:   []string{},
-		ConfirmedCorrect: false,
+var ScavengerHuntCluesSeed = []models.Clue{
+	{ClueID: 1,
+		Name:           "Brooklyn Bridge",
+		Text:           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis urna cursus eget nunc. Non blandit massa enim nec dui nunc. Senectus et netus et malesuada fames. Id porta nibh venenatis cras. Sit amet massa vitae tortor condimentum. Hac habitasse platea dictumst quisque sagittis purus sit. Tincidunt ornare massa eget egestas purus viverra accumsan in nisl. Hac habitasse platea dictumst vestibulum rhoncus. Egestas tellus rutrum tellus pellentesque eu.",
+		HuntID:         1,
+		Value:          20,
+		MaxSubmissions: 3,
 	},
 }

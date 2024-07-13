@@ -12,10 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var clues []models.ScavengerHuntClue
-var cluenames = make(map[string]string)
+var clues []models.Clue
+var cluenames = make(map[string]int)
 
-// ScavengerHuntClue Functions
+// Clue Functions
 var clueIDTemp = 1
 
 func GetScavengerHuntClues(c *gin.Context) {
@@ -23,7 +23,7 @@ func GetScavengerHuntClues(c *gin.Context) {
 	// From here
 	if len(clues) == 0 {
 		for _, clue := range seed_data.ScavengerHuntCluesSeed {
-			clue.ID = strconv.Itoa(clueIDTemp)
+			clue.ClueID = clueIDTemp
 			// fmt.Printf("%+v\n", person)
 			createScavengerHuntClueByJson(c, clue)
 			clueIDTemp++
@@ -35,22 +35,21 @@ func GetScavengerHuntClues(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, clues)
 }
 
-func createScavengerHuntClueByJson(c *gin.Context, newClue models.ScavengerHuntClue) {
+func createScavengerHuntClueByJson(c *gin.Context, newClue models.Clue) {
 
 	newClueJSON, err := json.Marshal(newClue)
 	if err != nil {
-		log.Println("New ScavengerHuntClue: \t", newClueJSON)
+		log.Println("New Clue: \t", newClueJSON)
 		log.Println("Error marshaling JSON:", err)
 		return
 	}
 	clues = append(clues, newClue)
-	cluenames[newClue.Name] = newClue.ID
+	cluenames[newClue.Name] = newClue.ClueID
 	c.IndentedJSON(http.StatusCreated, newClue)
 }
 
 func CreateScavengerHuntClue(c *gin.Context) {
-	var newClue models.ScavengerHuntClue
-	newClue.ID = strconv.Itoa(clueIDTemp)
+	var newClue models.Clue
 	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on cluename
 	if err := c.BindJSON(&newClue); err != nil {
 		return
@@ -62,13 +61,13 @@ func CreateScavengerHuntClue(c *gin.Context) {
 
 	clueIDTemp++
 	clues = append(clues, newClue)
-	cluenames[newClue.Name] = newClue.ID
+	cluenames[newClue.Name] = newClue.ClueID
 	c.IndentedJSON(http.StatusCreated, newClue)
 }
 
-func GetScavengerHuntClueById(id string) (*models.ScavengerHuntClue, error) {
+func GetScavengerHuntClueById(id int) (*models.Clue, error) {
 	for i, clue := range clues {
-		if clue.ID == id {
+		if clue.ClueID == id {
 			return &clues[i], nil
 		}
 	}
@@ -77,7 +76,11 @@ func GetScavengerHuntClueById(id string) (*models.ScavengerHuntClue, error) {
 }
 
 func ScavengerHuntClueById(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
 	clue, err := GetScavengerHuntClueById(id)
 
 	if err != nil {
@@ -85,17 +88,5 @@ func ScavengerHuntClueById(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, clue)
-}
-
-func MarkCorrect(c *gin.Context) {
-	clue, err := GetScavengerHuntClueById("id")
-	log.Println(clue)
-	if err != nil {
-		log.Println(err)
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Error marking correct"})
-		return
-	}
-	clue.ConfirmedCorrect = true
 	c.IndentedJSON(http.StatusOK, clue)
 }

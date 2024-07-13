@@ -1,36 +1,45 @@
 package models
 
 type User struct {
-	ID           string   `json:"id"`
-	FirstName    string   `json:"firstname"`
-	LastName     string   `json:"lastname"`
-	EmailAddress string   `json:"emailaddress"`
-	Username     string   `json:"username"`
-	HuntHost     []string `json:"hunthost"`
+	UserID   int    `json:"user_id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+type Hunt struct {
+	HuntID      int    `json:"hunt_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	CreatedBy   int    `json:"created_by"`
+	MaxTeamSize uint   `json:"max_team_size"`
+}
+
+type Host struct {
+	HostID int `json:"host_id"`
+	UserID int `json:"user_id"`
+	HuntID int `json:"hunt_id"`
+}
+
+type Clue struct {
+	ClueID         int    `json:"clue_id"`
+	Name           string `json:"name"`
+	Text           string `json:"text"`
+	HuntID         int    `json:"hunt_id"`
+	Category       string `json:"category"`
+	Value          int    `json:"value"`
+	MaxSubmissions int    `json:"max_submissions"`
 }
 
 type Team struct {
-	ID          string `json:"id"`
-	TeamName    string `json:"teamname"`
-	TeamMembers []User `json:"teammembers"`
+	TeamID int    `json:"team_id"`
+	Name   string `json:"name"`
+	HuntID int    `json:"hunt_id"`
 }
 
-type ScavengerHunt struct {
-	ID                 string              `json:"id"`
-	ScavengerHuntName  string              `json:"scavengerhuntname"`
-	NumberOfTeams      int                 `json:"numberofteams"`
-	MaxNumberOfTeams   int                 `json:"maxnumberofteams"`
-	MaxNumberOfMembers int                 `json:"maxnumberofmembers"`
-	Teams              []Team              `json:"teams"`
-	ScavengerHuntClues []ScavengerHuntClue `json:"scavengerhuntclues"`
-}
-
-type ScavengerHuntClue struct {
-	ID               string   `json:"id"`
-	Name             string   `json:"name"`
-	Text             string   `json:"text"`
-	PointValue       int      `json:"pointvalue"`
-	ScavengerHunts   []string `json:"scavengerhunts"`
-	ConfirmedCorrect bool     `json:"confirmedcorrect"`
-	ClueCode         string   `json:"cluecode"`
+type Submission struct {
+	SubmissionID int    `json:"submission_id"`
+	TeamID       int    `json:"team_id"`
+	ClueID       int    `json:"clue_id"`
+	Answer       string `json:"answer"`
+	Score        int    `json:"score"`
 }

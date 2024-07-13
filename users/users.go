@@ -6,15 +6,15 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"log"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 var users []models.User
-var usernames = make(map[string]string)
+var usernames = make(map[string]int)
 
 // User Functions
 var userIDTemp = 1
@@ -24,7 +24,7 @@ func GetUsers(c *gin.Context) {
 	// From here
 	if len(users) == 0 {
 		for _, person := range seed_data.UsersSeed {
-			person.ID = strconv.Itoa(userIDTemp)
+			person.UserID = userIDTemp
 			// fmt.Printf("%+v\n", person)
 			createUserByJson(c, person)
 			userIDTemp++
@@ -45,13 +45,13 @@ func createUserByJson(c *gin.Context, newUser models.User) {
 		return
 	}
 	users = append(users, newUser)
-	usernames[newUser.Username] = newUser.ID
+	usernames[newUser.Username] = newUser.UserID
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
 
 func CreateUser(c *gin.Context) {
 	var newUser models.User
-	newUser.ID = strconv.Itoa(userIDTemp)
+	newUser.UserID = userIDTemp
 	// Attempting to add the ID field here so that there's no chance of collisions later on and can match only on username
 	if err := c.BindJSON(&newUser); err != nil {
 		return
@@ -63,13 +63,13 @@ func CreateUser(c *gin.Context) {
 
 	userIDTemp++
 	users = append(users, newUser)
-	usernames[newUser.Username] = newUser.ID
+	usernames[newUser.Username] = newUser.UserID
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
 
-func GetUserById(id string) (*models.User, error) {
+func GetUserById(id int) (*models.User, error) {
 	for i, user := range users {
-		if user.ID == id {
+		if user.UserID == id {
 			return &users[i], nil
 		}
 	}
@@ -78,7 +78,11 @@ func GetUserById(id string) (*models.User, error) {
 }
 
 func UserById(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
 	user, err := GetUserById(id)
 
 	if err != nil {
