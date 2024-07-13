@@ -5,10 +5,10 @@ import (
 )
 
 var UsersSeed = []models.User{
-	{FirstName: "Throsby", LastName: "Wells", EmailAddress: "twells@gmail.com", Username: "throsbyw"},
-	{FirstName: "Portia", LastName: "Wells", EmailAddress: "pwells@gmail.com", Username: "portiaw"},
-	{FirstName: "Tim", LastName: "Wells", EmailAddress: "t2wells@gmail.com", Username: "timw"},
-	{FirstName: "Portia", LastName: "Wells", EmailAddress: "pwells@gmail.com", Username: "portiaw2"},
+	{FirstName: "Horatio", LastName: "Puits", EmailAddress: "twerasdfs@gmail.com", Username: "Horatio"},
+	{FirstName: "Mercedes", LastName: "Puits", EmailAddress: "clarlasdfs@gmail.com", Username: "Mercedes"},
+	{FirstName: "Drakmar", LastName: "Puits", EmailAddress: "t2wasdfasdfls@gmail.com", Username: "Drakmar"},
+	{FirstName: "Groucho", LastName: "Puits", EmailAddress: "garasdfble@gmail.com", Username: "Groucho"},
 }
 
 var TeamsSeed = []models.Team{

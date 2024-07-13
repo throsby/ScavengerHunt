@@ -10,11 +10,9 @@ type User struct {
 }
 
 type Team struct {
-	ID                 string `json:"id"`
-	TeamName           string `json:"teamname"`
-	NumberOfMembers    int    `json:"numberofmembers"`
-	MaxNumberOfMembers int    `json:"maxnumberofmembers"`
-	TeamMembers        []User `json:"teammembers"`
+	ID          string `json:"id"`
+	TeamName    string `json:"teamname"`
+	TeamMembers []User `json:"teammembers"`
 }
 
 type ScavengerHunt struct {
@@ -22,6 +20,7 @@ type ScavengerHunt struct {
 	ScavengerHuntName  string              `json:"scavengerhuntname"`
 	NumberOfTeams      int                 `json:"numberofteams"`
 	MaxNumberOfTeams   int                 `json:"maxnumberofteams"`
+	MaxNumberOfMembers int                 `json:"maxnumberofmembers"`
 	Teams              []Team              `json:"teams"`
 	ScavengerHuntClues []ScavengerHuntClue `json:"scavengerhuntclues"`
 }
