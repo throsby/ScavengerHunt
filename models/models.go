@@ -1,11 +1,12 @@
 package models
 
 type User struct {
-	ID           string `json:"id"`
-	FirstName    string `json:"firstname"`
-	LastName     string `json:"lastname"`
-	EmailAddress string `json:"emailaddress"`
-	Username     string `json:"username"`
+	ID           string   `json:"id"`
+	FirstName    string   `json:"firstname"`
+	LastName     string   `json:"lastname"`
+	EmailAddress string   `json:"emailaddress"`
+	Username     string   `json:"username"`
+	HuntHost     []string `json:"hunthost"`
 }
 
 type Team struct {
