@@ -30,7 +30,8 @@ var ScavengerHuntSeed = []models.Hunt{
 }
 
 var ScavengerHuntCluesSeed = []models.Clue{
-	{ClueID: 1,
+	{
+		ClueID:         1,
 		Name:           "Brooklyn Bridge",
 		Text:           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis urna cursus eget nunc. Non blandit massa enim nec dui nunc. Senectus et netus et malesuada fames. Id porta nibh venenatis cras. Sit amet massa vitae tortor condimentum. Hac habitasse platea dictumst quisque sagittis purus sit. Tincidunt ornare massa eget egestas purus viverra accumsan in nisl. Hac habitasse platea dictumst vestibulum rhoncus. Egestas tellus rutrum tellus pellentesque eu.",
 		HuntID:         1,
