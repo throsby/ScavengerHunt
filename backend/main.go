@@ -5,7 +5,9 @@ import (
 	"ScavengerHunt/backend/scavengerhunts"
 	"ScavengerHunt/backend/teams"
 	"ScavengerHunt/backend/users"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -94,6 +96,19 @@ import (
 func main() {
 
 	router := gin.Default()
+
+	config := cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Allow your frontend's domain
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           24 * time.Hour,
+	}
+
+	// Apply the CORS middleware to the router
+	router.Use(cors.New(config))
+
 	router.GET("/users", users.GetUsers)
 	router.GET("/users/:id", users.UserById)
 	router.POST("/users", users.CreateUser)

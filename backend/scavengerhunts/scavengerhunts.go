@@ -26,7 +26,8 @@ func GetScavengerHunts(c *gin.Context) {
 		}
 		return
 	}
-	c.IndentedJSON(http.StatusOK, scavengerhunts)
+	// c.IndentedJSON(http.StatusOK, scavengerhunts)
+	c.JSON(http.StatusOK, scavengerhunts)
 }
 
 func createScavengerHuntByJson(c *gin.Context, newScavengerHunt models.Hunt) {
