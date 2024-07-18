@@ -1,0 +1,17 @@
+.hunts {
+    width: 90%;
+    display: flex;
+    align-content: center;
+    display: flex;
+}
+
+.hunt {
+    position: relative;
+    margin: 2.5%;
+    width: 40;
+    border: 1pt solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+

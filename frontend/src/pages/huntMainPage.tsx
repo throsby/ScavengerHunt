@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { ApiResponse } from "../../types/api";
+import styles from './huntMainPage.module.css';
 
 
 export default function HuntMainPage() {
@@ -21,14 +22,14 @@ export default function HuntMainPage() {
     },[])
 
     const jsxHunts = hunts.map(hunt => (
-        <div className="hunt" key={hunt.hunt_id}>
-            <span className="title">{hunt.title}</span>
-            <span className="description">{hunt.description}</span>
-            <span className="creator">{hunt.created_by}</span>
+        <div className={styles.hunt} key={hunt.hunt_id}>
+            <span className={styles.title}>{hunt.title}</span>
+            <span className={styles.description}>{hunt.description}</span>
+            <span className={styles.creator}>{hunt.created_by}</span>
         </div>))
         // console.log(hunt.hunt_id, Object.values(hunt)))
     
-    const renderable = hunts[0] != undefined ? <div className="hunts">{jsxHunts}</div> : <div>Chill bros!</div>
+    const renderable = hunts[0] != undefined ? <div className={styles.hunts}>{jsxHunts}</div> : <div>Chill bros!</div>
 
     return(<>{renderable}</>)
 }
