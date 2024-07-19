@@ -1,17 +1,39 @@
 .hunts {
-    width: 90%;
-    display: flex;
-    align-content: center;
-    display: flex;
+    position: relative;
+    display: grid;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(45%, auto));
 }
+
 
 .hunt {
     position: relative;
-    margin: 2.5%;
-    width: 40;
     border: 1pt solid black;
     display: flex;
+    aspect-ratio: 1 / 1.290 auto;
+    /* height: min(220px); */
+    margin: 4%;
     flex-direction: column;
+}
+
+.title {
+    position: relative;
+    align-self: self-start;
+    left: 8px;
+    top: 8px;
+}
+
+.description {
+    position: relative;
+    top: 8px;
+    left: 4px;
+}
+
+.creator {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
 }
 
 
