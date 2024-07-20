@@ -51,6 +51,34 @@ var ScavengerHuntSeed = []models.Hunt{
 		CreatedBy:   2,
 		Description: "Blurb blurb blurb",
 	},
+	{
+		HuntID:      4,
+		Title:       "Gilded Age II: The Return",
+		MaxTeamSize: 3,
+		CreatedBy:   1,
+		Description: "Blurb blurb blurb",
+	},
+	{
+		HuntID:      5,
+		Title:       "Silvered Age: Big Screen",
+		MaxTeamSize: 3,
+		CreatedBy:   1,
+		Description: "Blurb blurb blurb",
+	},
+	{
+		HuntID:      6,
+		Title:       "Bronzered Age II: Back in the Habit",
+		MaxTeamSize: 4,
+		CreatedBy:   2,
+		Description: "Blurb blurb blurb",
+	},
+	{
+		HuntID:      7,
+		Title:       "Gilded Cinematic Universe",
+		MaxTeamSize: 3,
+		CreatedBy:   3,
+		Description: "Blurb blurb blurb",
+	},
 }
 
 var ScavengerHuntCluesSeed = []models.Clue{

@@ -1,3 +1,4 @@
+
 .hunts {
     position: relative;
     display: grid;
@@ -15,20 +16,22 @@
     /* height: min(220px); */
     margin: 4%;
     flex-direction: column;
+    background-size: contain;
     background-image: linear-gradient(lightslategrey, rgba(0, 0, 0, 0));
 }
+
 
 .title {
     position: relative;
     align-self: self-start;
     left: 8px;
     top: 8px;
-    text-shadow: -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF;
+    text-shadow: -.75px -.75px 0 #FFF, .75px -.75px 0 #FFF, -.75px .75px 0 #FFF, .75px .75px 0 #FFF;
 }
 
 .description {
     position: relative;
-    top: 8px;
+    top: 10px;
     left: 4px;
 }
 
@@ -38,4 +41,15 @@
     right: 8px;
 }
 
+.chosen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    z-index: 1000;
+    background-size: cover; /* Ensure the background image covers the entire div */
+    background-position: center; /* Center the background image */
+}
 
