@@ -1,8 +1,8 @@
 "use client"
 import { useState, useEffect, SyntheticEvent } from "react";
-import { ApiResponse } from "../../types/api";
+import { ApiResponse } from "../../../types/api";
 import styles from './huntMainPage.module.css';
-import { Hunt } from "../../types/models";
+import { Hunt } from "../../../types/models";
 
 
 export default function HuntMainPage() {
