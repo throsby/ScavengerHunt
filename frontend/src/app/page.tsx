@@ -3,18 +3,16 @@ import styles from "./page.module.css";
 import Header from "@/components/Header/Header"
 
 import HuntMainPage from "@/components/HuntMainPage/huntMainPage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient()
+
+
 
 export default function Home() {
   
     return (
-
-    <QueryClientProvider client={queryClient}>
-      <Header/>
-      <HuntMainPage />
-    </QueryClientProvider>
-
+      <>
+        <Header/>
+        <HuntMainPage  />
+      </>
   );
 }
