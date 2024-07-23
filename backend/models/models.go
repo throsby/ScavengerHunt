@@ -6,6 +6,7 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
 type Hunt struct {
 	HuntID      int    `json:"hunt_id"`
 	Title       string `json:"title"`
