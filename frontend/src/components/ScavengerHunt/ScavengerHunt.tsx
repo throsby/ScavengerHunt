@@ -16,5 +16,9 @@ export default function ScavengerHunt(){
     console.log(isPending)
     console.log(data)
 
+
+
+
+
     return(<></>)
 }
