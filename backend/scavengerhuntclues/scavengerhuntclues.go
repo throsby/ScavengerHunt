@@ -2,6 +2,7 @@ package scavengerhuntclues
 
 import (
 	"ScavengerHunt/backend/models"
+	"ScavengerHunt/backend/scavengerhunts"
 	"ScavengerHunt/backend/seed_data"
 	"encoding/json"
 	"errors"
@@ -89,4 +90,19 @@ func ScavengerHuntClueById(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, clue)
+}
+
+func getCluesByHuntId(id int) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	hunt, err := scavengerhunts.GetScavengerHuntById(id)
+	print(hunt)
+	return
+}
+
+func CluesByHuntId(c *gin.Context) {
+
 }
