@@ -92,18 +92,21 @@ func ScavengerHuntClueById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, clue)
 }
 
-func getCluesByHuntId(id int) {
-	id, err := strconv.Atoi(c.Param("id"))
+func getCluesByHuntId(id int) *[]models.Clue {
+	hunt, err := scavengerhunts.GetScavengerHuntById(id)
+	if err != nil {
+
+	}
+	print(hunt)
+	return
+}
+
+func CluesByHuntId(c *gin.Context) {
+	huntid, err := strconv.Atoi(c.Param("huntid"))
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	hunt, err := scavengerhunts.GetScavengerHuntById(id)
-	print(hunt)
-	return
-
-}
-
-func CluesByHuntId(c *gin.Context) {
-
+	clues := getCluesByHuntId(huntid)
+	c.IndentedJSON(http.StatusOK, clues)
 }

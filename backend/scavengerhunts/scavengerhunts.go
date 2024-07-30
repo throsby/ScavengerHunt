@@ -110,7 +110,7 @@ func AddScavengerHuntClueToHunt(c *gin.Context) {
 	// 	// Handle error
 	// 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	// }
-
+	// 
 	// clue.ScavengerHunts = append(clue.ScavengerHunts, hunt.Title)
 	// hunt.ScavengerHuntClues = append(hunt.ScavengerHuntClues, *clue)
 	// c.IndentedJSON(http.StatusOK, hunt)
@@ -138,9 +138,9 @@ func RemoveScavengerHuntClueById(c *gin.Context) {
 	// 	// Handle error
 	// 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	// }
-
+	// 
 	// // TODO Check for if the clue is in the hunt
-
+	// 
 	// for _, huntToFind := range clue.ScavengerHunts {
 	// 	// Confirms by name because each ScavengerHunt must have a unique name
 	// 	// This is probably a bad strategy though
@@ -154,6 +154,6 @@ func RemoveScavengerHuntClueById(c *gin.Context) {
 	// 		// Remove clueToFind from []hunt.ScavengerHuntClues{}
 	// 	}
 	// }
-
+	// 
 	// c.IndentedJSON(http.StatusOK, hunt)
 }

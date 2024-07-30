@@ -132,6 +132,8 @@ func main() {
 	router.GET("/clues", scavengerhuntclues.GetScavengerHuntClues)
 	router.GET("/clues/:id", scavengerhuntclues.ScavengerHuntClueById)
 
+	rounter.GET("/cludes/:huntid", scavengerhuntclues.CluesByHuntId)
+
 	// For testing
 	go hitEndpoints()
 
