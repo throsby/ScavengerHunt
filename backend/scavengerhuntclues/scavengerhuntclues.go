@@ -101,6 +101,7 @@ func getCluesByHuntId(id int) {
 	hunt, err := scavengerhunts.GetScavengerHuntById(id)
 	print(hunt)
 	return
+
 }
 
 func CluesByHuntId(c *gin.Context) {
