@@ -101,7 +101,7 @@ func main() {
 	router := gin.Default()
 
 	config := cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // Allow your frontend's domain
+		AllowOrigins:     []string{"http://localhost:3000"}, // Allow frontend's domain
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -132,7 +132,9 @@ func main() {
 	router.GET("/clues", scavengerhuntclues.GetScavengerHuntClues)
 	router.GET("/clues/:id", scavengerhuntclues.ScavengerHuntClueById)
 
-	rounter.GET("/cludes/:huntid", scavengerhuntclues.CluesByHuntId)
+	router.GET("test/:id", scavengerhuntclues.WrapGetCluesByHuntID)
+
+	// router.GET("/clues/:huntid", scavengerhuntclues.CluesByHuntId)
 
 	// For testing
 	go hitEndpoints()

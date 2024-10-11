@@ -13,7 +13,6 @@ import {
 const queryClient = new QueryClient()
 
 
-
 export default function Home() {
   
     return (

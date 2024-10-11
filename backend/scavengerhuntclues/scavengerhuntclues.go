@@ -92,21 +92,32 @@ func ScavengerHuntClueById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, clue)
 }
 
-func getCluesByHuntId(id int) *[]models.Clue {
-	hunt, err := scavengerhunts.GetScavengerHuntById(id)
-	if err != nil {
-
-	}
-	print(hunt)
-	return
-}
-
-func CluesByHuntId(c *gin.Context) {
-	huntid, err := strconv.Atoi(c.Param("huntid"))
+func WrapGetCluesByHuntID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	clues := getCluesByHuntId(huntid)
-	c.IndentedJSON(http.StatusOK, clues)
+	c.IndentedJSON(http.StatusOK, getCluesByHuntId(id))
 }
+
+func getCluesByHuntId(id int) /*(*[]models.Clue, error)*/ any {
+	hunt, err := scavengerhunts.GetScavengerHuntById(id)
+	if err != nil {
+		// return nil, err
+
+	}
+	return (hunt)
+
+	// return , nil
+}
+
+// func CluesByHuntId(c *gin.Context) {
+// 	huntid, err := strconv.Atoi(c.Param("huntid"))
+// 	if err != nil {
+// 		c.Status(http.StatusBadRequest)
+// 		return
+// 	}
+// 	clues := getCluesByHuntId(huntid)
+// 	c.IndentedJSON(http.StatusOK, clues)
+// }
