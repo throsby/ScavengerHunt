@@ -102,6 +102,7 @@ func WrapGetCluesByHuntID(c *gin.Context) {
 }
 
 func getCluesByHuntId(id int) /*(*[]models.Clue, error)*/ any {
+
 	hunt, err := scavengerhunts.GetScavengerHuntById(id)
 	if err != nil {
 		// return nil, err
