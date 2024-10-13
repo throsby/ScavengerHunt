@@ -97,7 +97,6 @@ func hitEndpoints() {
 // Main
 
 func main() {
-	// defer db.Close()
 
 	router := gin.Default()
 
