@@ -97,6 +97,7 @@ func hitEndpoints() {
 // Main
 
 func main() {
+	// defer db.Close()
 
 	router := gin.Default()
 
@@ -139,5 +140,5 @@ func main() {
 	// For testing
 	go hitEndpoints()
 
-	router.Run("localhost:8080")
+	log.Fatal(router.Run("localhost:8080"))
 }
