@@ -39,6 +39,5 @@ run_sql_script() {
 # Create the database and user
 run_sql_script "create_database.sql"
 
-run_sql_script "../../models/persistence/sqlite/schema.sql"
-
+run_sql_script "../../models/persistence/postgres/schema.sql"
 
