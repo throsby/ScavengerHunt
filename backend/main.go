@@ -5,98 +5,109 @@ import (
 	"ScavengerHunt/backend/scavengerhunts"
 	"ScavengerHunt/backend/teams"
 	"ScavengerHunt/backend/users"
-	"bytes"
+	"database/sql"
 	"log"
-	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-func hitEndpoints() {
-	// Wait for 2 seconds
-	time.Sleep(3 * time.Second)
+// func hitEndpoints() {
+// 	// Wait for 2 seconds
+// 	time.Sleep(3 * time.Second)
+// 	log.Println("\tHitting GET Users Endpoint")
+// 	// Send the GET request
+// 	resp, err := http.Get("http://localhost:8080/users")
+// 	if err != nil {
+// 		log.Println("Error sending GET request:", err)
+// 		return
+// 	}
+// 	defer resp.Body.Close()
+// 	// Read and print the response body
+// 	body := new(bytes.Buffer)
+// 	body.ReadFrom(resp.Body)
+// 	log.Println("Response:", body.String())
+// 	// time.Sleep(1 * time.Second)
+// 	log.Println("\tHitting GET Teams Endpoint")
+// 	resp, err = http.Get("http://localhost:8080/teams")
+// 	if err != nil {
+// 		log.Println("Error sending GET request:", err)
+// 		return
+// 	}
+// 	defer resp.Body.Close()
+// 	// Read and print the response body
+// 	body = new(bytes.Buffer)
+// 	body.ReadFrom(resp.Body)
+// 	log.Println("Response:", body.String())
+// 	// time.Sleep(1 * time.Second)
+// 	log.Println("\tHitting GET ScavengerHunts Endpoint")
+// 	resp, err = http.Get("http://localhost:8080/scavengerhunts")
+// 	if err != nil {
+// 		log.Println("Error sending GET request:", err)
+// 		return
+// 	}
+// 	defer resp.Body.Close()
+// 	// Read and print the response body
+// 	body = new(bytes.Buffer)
+// 	body.ReadFrom(resp.Body)
+// 	log.Println("Response:", body.String())
+// 	// time.Sleep(1 * time.Second)
+// 	log.Println("\tHitting GET ScavengerHunt Clues Endpoint")
+// 	resp, err = http.Get("http://localhost:8080/clues")
+// 	if err != nil {
+// 		log.Println("Error sending GET request:", err)
+// 		return
+// 	}
+// 	defer resp.Body.Close()
+// 	// Read and print the response body
+// 	body = new(bytes.Buffer)
+// 	body.ReadFrom(resp.Body)
+// 	log.Println("Response:", body.String())
+// 	// time.Sleep(1 * time.Second)
+// 	// log.Println("\tHitting Post ScavengerHuntClues Endpoint to Add clue to hunt")
+// 	// resp, err = http.Post("http://localhost:8080/scavengerhunts/1/1", "application/json", nil)
+// 	// if err != nil {
+// 	// 	log.Println("Error sending PATCH request:", err)
+// 	// 	return
+// 	// }
+// 	// defer resp.Body.Close()
+// 	// // Read and print the response body
+// 	// body = new(bytes.Buffer)
+// 	// body.ReadFrom(resp.Body)
+// 	// log.Println("Response:", body.String())
+// }
 
-	log.Println("\tHitting GET Users Endpoint")
-	// Send the GET request
-	resp, err := http.Get("http://localhost:8080/users")
+func initDB() *sql.DB {
+	// Loading the .env file so that's it's available to the os.Getenv function
+	err := godotenv.Load("config/.env")
 	if err != nil {
-		log.Println("Error sending GET request:", err)
-		return
+		log.Fatalln("Error loading .env file")
 	}
-	defer resp.Body.Close()
 
-	// Read and print the response body
-	body := new(bytes.Buffer)
-	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String())
-
-	// time.Sleep(1 * time.Second)
-
-	log.Println("\tHitting GET Teams Endpoint")
-	resp, err = http.Get("http://localhost:8080/teams")
+	// Creating the connection string. Local_DB_USER is because I wasn't able to give permissions to another user on this machine for some reason
+	connStr := "user=" + os.Getenv("LOCAL_DB_USER") + " dbname=myappdb sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		log.Println("Error sending GET request:", err)
-		return
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	defer resp.Body.Close()
-
-	// Read and print the response body
-	body = new(bytes.Buffer)
-	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String())
-
-	// time.Sleep(1 * time.Second)
-
-	log.Println("\tHitting GET ScavengerHunts Endpoint")
-	resp, err = http.Get("http://localhost:8080/scavengerhunts")
-	if err != nil {
-		log.Println("Error sending GET request:", err)
-		return
+	// Ping to test
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Failed to ping database: %v", err)
 	}
-	defer resp.Body.Close()
+	// defer db.Close()
 
-	// Read and print the response body
-	body = new(bytes.Buffer)
-	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String())
-
-	// time.Sleep(1 * time.Second)
-
-	log.Println("\tHitting GET ScavengerHunt Clues Endpoint")
-	resp, err = http.Get("http://localhost:8080/clues")
-
-	if err != nil {
-		log.Println("Error sending GET request:", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	// Read and print the response body
-	body = new(bytes.Buffer)
-	body.ReadFrom(resp.Body)
-	log.Println("Response:", body.String())
-
-	// time.Sleep(1 * time.Second)
-
-	// log.Println("\tHitting Post ScavengerHuntClues Endpoint to Add clue to hunt")
-	// resp, err = http.Post("http://localhost:8080/scavengerhunts/1/1", "application/json", nil)
-	// if err != nil {
-	// 	log.Println("Error sending PATCH request:", err)
-	// 	return
-	// }
-	// defer resp.Body.Close()
-
-	// // Read and print the response body
-	// body = new(bytes.Buffer)
-	// body.ReadFrom(resp.Body)
-	// log.Println("Response:", body.String())
+	return db
 }
 
 // Main
 
 func main() {
+
+	db := initDB()
+	defer db.Close()
 
 	router := gin.Default()
 
@@ -112,7 +123,8 @@ func main() {
 	// Apply the CORS middleware to the router
 	router.Use(cors.New(config))
 
-	router.GET("/users", users.GetUsers)
+	// router.GET("/users", users.JSONGetUsers)
+	router.GET("/users", func(c *gin.Context) { users.GetUsers(c, db) })
 	router.GET("/users/:id", users.UserById)
 	router.POST("/users", users.CreateUser)
 
@@ -137,7 +149,7 @@ func main() {
 	// router.GET("/clues/:huntid", scavengerhuntclues.CluesByHuntId)
 
 	// For testing
-	go hitEndpoints()
+	// go hitEndpoints()
 
 	log.Fatal(router.Run("localhost:8080"))
 }

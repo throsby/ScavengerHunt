@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	connStr := "user=myuser dbname=myappdb sslmode=disable"
+	connStr := "user=throsbywells dbname=myappdb sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -146,27 +146,27 @@ func main() {
 		},
 	}
 
-	// var UsersSeed = []models.User{
-	// 	{Username: "Horatio", Email: "twerasdfs@gmail.com", Password: "asdflkj"},
-	// 	{Username: "Mercedes", Email: "clarlasdfs@gmail.com", Password: "asdflkj"},
-	// 	{Username: "Drakmar", Email: "t2wasdfasdfls@gmail.com", Password: "asdflkj"},
-	// 	{Username: "Groucho", Email: "garasdfble@gmail.com", Password: "asdflkj"},
-	// }
+	var UsersSeed = []models.User{
+		{Username: "Horatio", Email: "twerasdfs@gmail.com", Password: "asdflkj"},
+		{Username: "Mercedes", Email: "clarlasdfs@gmail.com", Password: "asdflkj"},
+		{Username: "Drakmar", Email: "t2wasdfasdfls@gmail.com", Password: "asdflkj"},
+		{Username: "Groucho", Email: "garasdfble@gmail.com", Password: "asdflkj"},
+	}
 
-	// // Insert users into the database
-	// for _, user := range UsersSeed {
-	// 	_, err := db.Exec(
-	// 		`INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)`,
-	// 		user.Username,
-	// 		user.Email,
-	// 		user.Password,
-	// 	)
-	// 	if err != nil {
-	// 		log.Printf("Error inserting user %s: %v\n", user.Username, err)
-	// 	} else {
-	// 		log.Println("Users inserted successfully.")
-	// 	}
-	// }
+	// Insert users into the database
+	for _, user := range UsersSeed {
+		_, err := db.Exec(
+			`INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)`,
+			user.Username,
+			user.Email,
+			user.Password,
+		)
+		if err != nil {
+			log.Printf("Error inserting user %s: %v\n", user.Username, err)
+		} else {
+			log.Println("Users inserted successfully.")
+		}
+	}
 
 	// Insert teams into the database
 	for _, hunt := range ScavengerHuntsSeed {

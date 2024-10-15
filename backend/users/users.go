@@ -3,6 +3,7 @@ package users
 import (
 	"ScavengerHunt/backend/models"
 	"ScavengerHunt/backend/seed_data"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 var users []models.User
@@ -19,7 +21,7 @@ var usernames = make(map[string]int)
 // User Functions
 var userIDTemp = 1
 
-func GetUsers(c *gin.Context) {
+func JSONGetUsers(c *gin.Context) {
 	// This exists to create seed Users for the purposes of testing at the start
 	// From here
 	if len(users) == 0 {
@@ -34,6 +36,29 @@ func GetUsers(c *gin.Context) {
 	// To here
 
 	c.IndentedJSON(http.StatusOK, users)
+}
+
+func GetUsers(c *gin.Context, db *sql.DB) {
+	// This exists to create seed Users for the purposes of testing at the start
+	// From here
+	rows, err := db.Query("SELECT user_id, username, email FROM \"User\"")
+	if err != nil {
+		log.Fatalf("Failed to query database: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
+	}
+	var users []models.User
+
+	// Iterate through result of query
+	for rows.Next() {
+		var user models.User
+		err = rows.Scan(&user.UserID, &user.Username, &user.Email)
+		if err != nil {
+			log.Println(err)
+		}
+		print(user.Username)
+		users = append(users, user)
+	}
+	c.JSON(http.StatusOK, users)
 }
 
 func createUserByJson(c *gin.Context, newUser models.User) {

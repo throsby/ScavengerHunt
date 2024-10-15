@@ -32,7 +32,6 @@ func GetScavengerHuntClues(c *gin.Context) {
 		return
 	}
 	// To here
-
 	c.IndentedJSON(http.StatusOK, clues)
 }
 
