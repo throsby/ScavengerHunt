@@ -125,7 +125,7 @@ func main() {
 
 	// router.GET("/users", users.JSONGetUsers)
 	router.GET("/users", func(c *gin.Context) { users.GetUsers(c, db) })
-	router.GET("/users/:id", users.UserById)
+	router.GET("/users/:id", func(c *gin.Context) { users.UserById(c, db) })
 	router.POST("/users", users.CreateUser)
 
 	router.GET("/teams", teams.GetTeams)
