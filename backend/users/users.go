@@ -45,6 +45,7 @@ func GetUsers(c *gin.Context, db *sql.DB) {
 	if err != nil {
 		log.Fatalf("Failed to query database: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
+		return
 	}
 	var users []models.User
 	// Iterate through result of query
@@ -54,7 +55,7 @@ func GetUsers(c *gin.Context, db *sql.DB) {
 		if err != nil {
 			log.Println(err)
 		}
-		print(user.Username)
+		// print(user.Username)
 		users = append(users, user)
 	}
 	c.JSON(http.StatusOK, users)
@@ -139,19 +140,12 @@ func UserById(c *gin.Context, db *sql.DB) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Must use int value for user_id"})
 		return
 	}
+
 	// Format query string
 	row := db.QueryRow("SELECT user_id, username, email FROM \"User\" WHERE user_id = $1;", id)
-	// log.Println(row)
-	if err != nil {
-		log.Printf("Failed to query database: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
-		return
-	}
-
 	var user models.User
 	// Assign to user
 	err = row.Scan(&user.UserID, &user.Username, &user.Email)
-
 	if err == sql.ErrNoRows {
 		log.Printf("Error: No row was found, this is possibly because UserById requested a user_id that doesn't exist. %v", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})

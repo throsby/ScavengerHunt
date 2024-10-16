@@ -134,7 +134,7 @@ func main() {
 	router.PATCH("/teams/add/:teamID/:userID", teams.AddUserToTeamByUserID)
 	router.PATCH("/teams/remove/:teamID/:userID", teams.RemoveUserFromTeamByUserID)
 
-	router.GET("/scavengerhunts", scavengerhunts.GetScavengerHunts)
+	router.GET("/scavengerhunts", func(c *gin.Context) { scavengerhunts.GetScavengerHunts(c, db) })
 	router.GET("/scavengerhunts/:id", scavengerhunts.ScavengerHuntById)
 	router.POST("/scavengerhunts", scavengerhunts.CreateScavengerHunt)
 	router.POST("/scavengerhunts/remove/:huntID/:clueID", scavengerhunts.RemoveScavengerHuntClueById)

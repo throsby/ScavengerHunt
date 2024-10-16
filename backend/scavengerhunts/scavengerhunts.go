@@ -3,6 +3,7 @@ package scavengerhunts
 import (
 	"ScavengerHunt/backend/models"
 	"ScavengerHunt/backend/seed_data"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -16,7 +17,30 @@ var scavengerhunts []models.Hunt
 var scavengerhunt_names = make(map[string]int)
 var scavengerhuntIDTemp = 1
 
-func GetScavengerHunts(c *gin.Context) {
+func GetScavengerHunts(c *gin.Context, db *sql.DB) {
+	rows, err := db.Query("SELECT hunt_id, title, description, username FROM Hunt INNER JOIN \"User\" ON Hunt.created_by = \"User\".user_id;")
+	if err != nil {
+		log.Printf("Failed to query database: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch hunts"})
+		return
+	}
+
+	var scavengerhunts []models.Hunt
+	// Iterate through results of query
+	for rows.Next() {
+		var hunt models.Hunt
+		// Scan assigns values put into args list
+		err = rows.Scan(&hunt.HuntID, &hunt.Title, &hunt.Description, &hunt.Description, &hunt.CreatedBy)
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusNotFound, gin.H{"error": "No rows found during query of hunts"})
+		}
+		scavengerhunts = append(scavengerhunts, hunt)
+	}
+	c.JSON(http.StatusOK, scavengerhunts)
+}
+
+func JSONGetScavengerHunts(c *gin.Context) {
 	if len(scavengerhunts) == 0 {
 		for _, person := range seed_data.ScavengerHuntSeed {
 			person.HuntID = scavengerhuntIDTemp
@@ -110,7 +134,7 @@ func AddScavengerHuntClueToHunt(c *gin.Context) {
 	// 	// Handle error
 	// 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	// }
-	// 
+	//
 	// clue.ScavengerHunts = append(clue.ScavengerHunts, hunt.Title)
 	// hunt.ScavengerHuntClues = append(hunt.ScavengerHuntClues, *clue)
 	// c.IndentedJSON(http.StatusOK, hunt)
@@ -138,9 +162,9 @@ func RemoveScavengerHuntClueById(c *gin.Context) {
 	// 	// Handle error
 	// 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "This clue doesn't seem to exist"})
 	// }
-	// 
+	//
 	// // TODO Check for if the clue is in the hunt
-	// 
+	//
 	// for _, huntToFind := range clue.ScavengerHunts {
 	// 	// Confirms by name because each ScavengerHunt must have a unique name
 	// 	// This is probably a bad strategy though
@@ -154,6 +178,6 @@ func RemoveScavengerHuntClueById(c *gin.Context) {
 	// 		// Remove clueToFind from []hunt.ScavengerHuntClues{}
 	// 	}
 	// }
-	// 
+	//
 	// c.IndentedJSON(http.StatusOK, hunt)
 }

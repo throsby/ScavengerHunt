@@ -188,7 +188,7 @@ func main() {
 	for _, clue := range ScavengerHuntCluesSeed {
 		_, err := db.Exec(
 			`INSERT INTO Clue (description, hunt_id, category, score) VALUES ($1, $2, $3, $4)`,
-			// clue.Name,
+			clue.Name,
 			clue.Text,
 			clue.HuntID,
 			clue.Category,
