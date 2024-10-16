@@ -6,7 +6,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -123,7 +122,7 @@ func JSONGetUserById(id int) (*models.User, error) {
 
 // TODO
 func GetUserById(id int) (*models.User, error) {
-	// TODO
+
 	for i, user := range users {
 		if user.UserID == id {
 			return &users[i], nil
@@ -133,31 +132,29 @@ func GetUserById(id int) (*models.User, error) {
 	return nil, errors.New("user not found")
 }
 
-// TODO
 func UserById(c *gin.Context, db *sql.DB) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.Status(http.StatusBadRequest)
+		log.Printf("Error: Must use int value when calling UserById because user_id field is a non-float int")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Must use int value for user_id"})
 		return
 	}
 	// Format query string
-	qry := fmt.Sprintf("SELECT user_id, username, email FROM \"User\" WHERE user_id = %v;", id)
-
-	row := db.QueryRow(qry)
-	log.Println(row)
+	row := db.QueryRow("SELECT user_id, username, email FROM \"User\" WHERE user_id = $1;", id)
+	// log.Println(row)
 	if err != nil {
-		log.Fatalf("Failed to query database: %v", err)
+		log.Printf("Failed to query database: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
+		return
 	}
 
 	var user models.User
 	// Assign to user
 	err = row.Scan(&user.UserID, &user.Username, &user.Email)
-	log.Println(err)
 
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+	if err == sql.ErrNoRows {
+		log.Printf("Error: No row was found, this is possibly because UserById requested a user_id that doesn't exist. %v", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
