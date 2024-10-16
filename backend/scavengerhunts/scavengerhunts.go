@@ -30,10 +30,11 @@ func GetScavengerHunts(c *gin.Context, db *sql.DB) {
 	for rows.Next() {
 		var hunt models.Hunt
 		// Scan assigns values put into args list
-		err = rows.Scan(&hunt.HuntID, &hunt.Title, &hunt.Description, &hunt.Description, &hunt.CreatedBy)
+		err = rows.Scan(&hunt.HuntID, &hunt.Title, &hunt.Description, &hunt.CreatedBy)
 		if err != nil {
-			log.Println(err)
+			log.Printf("Failed to query database: %v", err)
 			c.JSON(http.StatusNotFound, gin.H{"error": "No rows found during query of hunts"})
+			return
 		}
 		scavengerhunts = append(scavengerhunts, hunt)
 	}
