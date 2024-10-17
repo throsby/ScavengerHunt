@@ -96,7 +96,7 @@ func GetScavengerHuntById(id int) (*models.Hunt, error) {
 	return nil, errors.New("scavengerhunt not found")
 }
 
-func ScavengerHuntById(c *gin.Context) {
+func JSONScavengerHuntById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Status(http.StatusBadRequest)
@@ -106,6 +106,24 @@ func ScavengerHuntById(c *gin.Context) {
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "scavenger hunt not found"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, scavengerhunt)
+}
+
+func ScavengerHuntById(c *gin.Context, db *sql.DB) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Must use int value for hunt_id"})
+		return
+	}
+
+	row := db.QueryRow("SELECT hunt_id, title, description, username FROM Hunt INNER JOIN \"User\" ON Hunt.created_by = \"User\".user_id WHERE Hunt.hunt_id = $1;", id)
+	var scavengerhunt models.Hunt
+	err = row.Scan(&scavengerhunt.HuntID, &scavengerhunt.Title, &scavengerhunt.Description, &scavengerhunt.Creator)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "scavenger hunt not found"})
 		return
 	}
 

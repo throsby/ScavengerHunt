@@ -54,6 +54,7 @@ func GetUsers(c *gin.Context, db *sql.DB) {
 		err = rows.Scan(&user.UserID, &user.Username, &user.Email)
 		if err != nil {
 			log.Println(err)
+			c.JSON(http.StatusNotFound, gin.H{"error": "No rows found during query of users"})
 		}
 		// print(user.Username)
 		users = append(users, user)
