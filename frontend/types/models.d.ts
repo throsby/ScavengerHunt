@@ -2,6 +2,7 @@ export interface Hunt {
     hunt_id:  number;
     title: string;
     description: string;
+    creator: string;
     created_by: number;
     max_team_size: number;
 }

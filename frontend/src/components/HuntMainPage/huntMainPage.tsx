@@ -22,13 +22,14 @@ export default function HuntMainPage() {
         }
         fetchHunts()
     },[])
-
+    
     function handleClick(e: SyntheticEvent, respective_hunt_id: number) {
         console.log(e.currentTarget)
         console.log(respective_hunt_id)
-
+        
         setSelectedHuntId(respective_hunt_id)
     }
+    console.log(hunts)
     
     const jsxHunts = hunts.map((hunt) => (
         <div style={{ "backgroundImage": `linear-gradient(lightslategrey, rgba(0, 0, 0, 0)), url(/output-${hunt.hunt_id}.jpg)` } as React.CSSProperties} onClick={(event) => { handleClick(event, hunt.hunt_id) }} className={`${styles.hunt} ${hunt.hunt_id === selectedHuntId ? styles.chosen : ""}`} key={hunt.hunt_id}>
@@ -36,7 +37,7 @@ export default function HuntMainPage() {
             <>
                 <span className={styles.title}>{hunt.title}</span>
                 <span className={styles.description}>{hunt.description}</span>
-                <span className={styles.creator}>{hunt.created_by}</span>
+                <span className={styles.creator}>{hunt.creator}</span>
             </>
             )}
         </div>))

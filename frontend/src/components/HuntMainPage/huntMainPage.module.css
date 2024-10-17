@@ -7,7 +7,6 @@
     grid-template-columns: repeat(auto-fill, minmax(45%, auto));
 }
 
-
 .hunt {
     position: relative;
     border: 1pt solid black;
@@ -19,7 +18,6 @@
     background-size: contain;
     background-image: linear-gradient(lightslategrey, rgba(0, 0, 0, 0));
 }
-
 
 .title {
     position: relative;
