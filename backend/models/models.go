@@ -12,7 +12,7 @@ type Hunt struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	CreatedBy   int    `json:"created_by"`
-	Creator     string `json:creator`
+	Creator     string `json:"creator"`
 	MaxTeamSize uint   `json:"max_team_size"`
 }
 
