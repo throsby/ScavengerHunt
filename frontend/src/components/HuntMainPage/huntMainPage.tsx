@@ -9,12 +9,27 @@ export default function HuntMainPage() {
     const [hunts, setHunts] = useState<ApiResponse>([])
     const [selectedHuntId, setSelectedHuntId] = useState<number | null>(null)
 
+        // if (window.location.hostname === 'localhost') {
+        //     fetch("http://localhost:8080/scavengerhunts/2").then((res) => res.json())
+        //   } else {
+        //     setApiBaseUrl('http://192.168.x.x:5000'); // Replace with your computer's local IP
+        //   }
+
+
     useEffect(()=> {
         async function fetchHunts(): Promise<void>{
             try{
-                let req = await fetch("http://localhost:8080/scavengerhunts")
-                let res: ApiResponse = await req.json()
-                setHunts(res)
+                if (window.location.hostname === 'localhost') {
+                    console.log("localhost")
+                    let req = await fetch("http://localhost:8080/scavengerhunts")
+                    let res: ApiResponse = await req.json()
+                    setHunts(res)
+                } else {
+                    console.log("0.0.0.0")
+                    let req = await fetch("http://0.0.0.0:8080/scavengerhunts")
+                    let res: ApiResponse = await req.json()
+                    setHunts(res)
+                }
             }
             catch(err) {
                 console.log(err)

@@ -118,6 +118,7 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           24 * time.Hour,
+		// AllowAllOrigins:  true,
 	}
 
 	// Apply the CORS middleware to the router
@@ -152,4 +153,5 @@ func main() {
 	// go hitEndpoints()
 
 	log.Fatal(router.Run("localhost:8080"))
+	// log.Fatal(router.Run("0.0.0.0:8080"))
 }

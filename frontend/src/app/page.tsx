@@ -19,7 +19,7 @@ export default function Home() {
         <QueryClientProvider client={queryClient}>
           <Header/>
           <HuntMainPage  />
-          <ScavengerHunt />
+          {/* <ScavengerHunt /> */}
         </QueryClientProvider>
       </>
   );
